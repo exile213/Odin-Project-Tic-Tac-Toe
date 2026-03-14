@@ -51,27 +51,80 @@ let player1 = player("Emil", "X");
 let player2 = player("Diaz", "O");
 
 
+
+
 const gamecontroller = (function () {
     // starts the game
     let boardgame = gameboard;
     let currentplayer = player1;
+    let maxturn = 0;
+    let GameOver = false;
 
     console.log(`Game Start! ${currentplayer} turn first:`)
     console.log(boardgame.getboard())
     //take input here 
 
+    function checkWinner() {
+        let boardindex = boardgame.getboard()
+        //Player wins Horizontal line
+        if (boardindex[0] == currentplayer.mark && boardindex[1] == currentplayer.mark && boardindex[2] == currentplayer.mark) {
+            return true;
+
+        } else if (boardindex[3] == currentplayer.mark && boardindex[4] == currentplayer.mark && boardindex[5] == currentplayer.mark) {
+            return true
+        }
+        else if (boardindex[6] == currentplayer.mark && boardindex[7] == currentplayer.mark && boardindex[8] == currentplayer.mark) {
+            return true
+        }
+        //Player wins Vertical
+        if (boardindex[0] == currentplayer.mark && boardindex[3] == currentplayer.mark && boardindex[6] == currentplayer.mark) {
+            return true
+
+        } else if (boardindex[1] == currentplayer.mark && boardindex[4] == currentplayer.mark && boardindex[7] == currentplayer.mark) {
+            return true
+        }
+        else if (boardindex[2] == currentplayer.mark && boardindex[5] == currentplayer.mark && boardindex[8] == currentplayer.mark) {
+            return true
+        }
+        //Player wins Diagonal
+        if (boardindex[0] == currentplayer.mark && boardindex[4] == currentplayer.mark && boardindex[8] == currentplayer.mark) {
+            return true
+
+        } else if (boardindex[2] == currentplayer.mark && boardindex[4] == currentplayer.mark && boardindex[6] == currentplayer.mark) {
+            return true
+        }
+    }
     return {
         playTurn(index) {
+            if (maxturn == 9) {
+                console.log("Game Over")
+                GameOver = true;
+                return
+            }
             let playerindex = index
             let getcell = boardgame.getcell(playerindex)
-            if (getcell.length === 0) {
+            if (getcell.length === 0 && GameOver == false) {
                 boardgame.setcell(playerindex, currentplayer.mark)
+
+                isWin = checkWinner(currentplayer.mark)
+
+                if (isWin) {
+                    console.log(`${currentplayer.name} is the winner!`)
+                    GameOver = true;
+                    return
+                } else if (!isWin && maxturn == 8) {
+                    GameOver = true;
+                    console.log("There was no winner, Maximum amount of turns reached")
+                }
+
+
                 console.log(boardgame.getboard())
                 if (currentplayer == player1) {
                     currentplayer = player2;
                 } else {
                     currentplayer = player1
                 }
+                maxturn++
             } else {
                 console.log("That cell is taken by the other player")
             }
