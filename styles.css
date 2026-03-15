@@ -1,0 +1,87 @@
+:root {
+    --primary-color: #00ff9d;
+    --secondary-color: #026886;
+    --tertiary-color: #aa0202;
+}
+
+* {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--primary-color);
+    text-align: center;
+    padding-top: 20px;
+}
+
+.title-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+    font-size: 60px;
+    font-weight: bold;
+}
+
+.description {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.playertext-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    justify-content: center;
+    align-items: center;
+}
+
+.player1-label {
+    font-size: 40px;
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+.player2-label {
+    font-size: 40px;
+    font-weight: bold;
+    color: var(--tertiary-color);
+}
+
+.grid-container {
+    text-align: center;
+    width: 600px;
+    height: 600px;
+    background-color: azure;
+    border: solid 1px black;
+    display: grid;
+    grid-template-columns: repeat(3, 200px);
+    grid-template-rows: repeat(3, 200px);
+}
+
+.game-cell {
+    border: solid 2px black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-cell:hover {
+    background-color: rgb(163, 167, 167);
+}
+
+footer {
+    font-size: 30px;
+    font-weight: bold;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
