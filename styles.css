@@ -55,6 +55,12 @@ body {
     color: var(--tertiary-color);
 }
 
+.winnerText {
+    display: hidden;
+    font-size: 30px;
+}
+
+
 .grid-container {
     text-align: center;
     width: 600px;

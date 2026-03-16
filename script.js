@@ -25,6 +25,8 @@
 
 */
 
+
+
 const gameboard = (function () {
     let board = ["", "", "", "", "", "", "", "", ""];
     return {
@@ -129,5 +131,32 @@ const gamecontroller = (function () {
                 console.log("That cell is taken by the other player")
             }
         }
+    }
+})();
+
+//this renders console board to UI board
+const displaycontroller = (function () {
+    const cells = document.getElementsByClassName('game-cell');
+    for (let i = 0; i <= 8; i++) {
+        cells[i].addEventListener("click", () => {
+            gamecontroller.playTurn(i)
+            renderboard()
+        });
+    }
+
+    function renderboard() {
+        let boardinstance = gameboard.getboard();
+        for (let i = 0; i <= 8; i++) {
+            cells[i].textContent = boardinstance[i];
+        }
+
+    }
+
+    function renderwinner() {
+
+    }
+    return {
+        renderboard,
+        renderwinner
     }
 })();
