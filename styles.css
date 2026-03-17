@@ -85,6 +85,19 @@ body {
     background-color: rgb(163, 167, 167);
 }
 
+#reset-button {
+    width: 100px;
+    font: 50px;
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+#reset-button:hover {
+    background-color: rgb(178, 180, 180);
+    ;
+}
+
 footer {
     font-size: 30px;
     font-weight: bold;

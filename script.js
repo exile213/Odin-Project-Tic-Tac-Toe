@@ -38,6 +38,9 @@ const gameboard = (function () {
         },
         setcell(index, mark) {
             board[index] = mark;
+        },
+        reset() {
+            board = ["", "", "", "", "", "", "", "", ""];
         }
     }
 })();
@@ -60,7 +63,7 @@ const gamecontroller = (function () {
     let boardgame = gameboard;
     let currentplayer = player1;
     let maxturn = 0;
-    let gameState = "";
+    let gameState = "ongoing";
 
     console.log(`Game Start! ${currentplayer} turn first:`)
     console.log(boardgame.getboard())
@@ -98,7 +101,6 @@ const gamecontroller = (function () {
     }
     return {
         playTurn(index) {
-            gameState = "ongoing"
             if (maxturn == 9) {
                 console.log("Game Over")
                 gameState = "tie";
@@ -109,11 +111,10 @@ const gamecontroller = (function () {
             if (getcell.length === 0 && gameState == "ongoing") {
                 boardgame.setcell(playerindex, currentplayer.mark)
 
-                isWin = checkWinner(currentplayer.mark)
+                let isWin = checkWinner(currentplayer.mark)
 
                 if (isWin) {
                     gameState = "win";
-
                     return { gameState, isWin, currentplayer }
                 } else if (!isWin && maxturn == 8) {
                     gameState = "tie";
@@ -133,13 +134,23 @@ const gamecontroller = (function () {
             } else {
                 console.log("That cell is taken by the other player")
             }
+        },
+        reset() {
+            currentplayer = player1;
+            maxturn = 0
+            gameState = "ongoing";
+            boardgame.reset();
         }
     }
+
+
 })();
 
-//this renders console board to UI board
+//t
 const displaycontroller = (function () {
     const cells = document.getElementsByClassName('game-cell');
+    const textwinner = document.getElementById('WinnerText')
+    const reset = document.getElementById('reset-button')
     for (let i = 0; i <= 8; i++) {
         cells[i].addEventListener("click", () => {
             let result = gamecontroller.playTurn(i)
@@ -147,6 +158,10 @@ const displaycontroller = (function () {
             renderwinner(result)
         });
     }
+    reset.addEventListener("click", () => {
+        gamecontroller.reset()
+        resetUI()
+    })
 
     function renderboard() {
         let boardinstance = gameboard.getboard();
@@ -162,16 +177,26 @@ const displaycontroller = (function () {
     }
 
     function renderwinner(outcome) {
-        let textwinner = document.getElementById('WinnerText')
-        let winner = outcome.currentplayer
         if (outcome != null) {
+            let winner = outcome.currentplayer
             if (outcome.gameState == "win") {
                 textwinner.style.visibility = "visible";
                 textwinner.textContent = `${winner.name} is the winner!`;
+            } else if (outcome.gameState == "tie") {
+                textwinner.style.visibility = "visible";
+                textwinner.textContent = `The Game ended in a tie! No more turns left `;
             }
 
         }
 
+    }
+
+    function resetUI() {
+        for (let i = 0; i <= 8; i++) {
+            cells[i].textContent = "";
+        }
+        textwinner.textContent = "";
+        textwinner.style.visibility = "hidden";
     }
     return {
         renderboard,
