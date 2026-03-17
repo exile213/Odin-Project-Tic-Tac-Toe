@@ -55,9 +55,10 @@ body {
     color: var(--tertiary-color);
 }
 
-.winnerText {
-    display: hidden;
+#WinnerText {
+    visibility: hidden;
     font-size: 30px;
+    color: rgb(245, 78, 203);
 }
 
 
@@ -73,6 +74,7 @@ body {
 }
 
 .game-cell {
+    font-size: 40px;
     border: solid 2px black;
     display: flex;
     justify-content: center;

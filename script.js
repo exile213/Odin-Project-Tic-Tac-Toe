@@ -49,8 +49,8 @@ function player(name, mark) {
     }
 }
 
-let player1 = player("Emil", "X");
-let player2 = player("Diaz", "O");
+let player1 = player("Player1", "X");
+let player2 = player("Player2", "O");
 
 
 
@@ -60,7 +60,7 @@ const gamecontroller = (function () {
     let boardgame = gameboard;
     let currentplayer = player1;
     let maxturn = 0;
-    let GameOver = false;
+    let gameState = "";
 
     console.log(`Game Start! ${currentplayer} turn first:`)
     console.log(boardgame.getboard())
@@ -98,25 +98,27 @@ const gamecontroller = (function () {
     }
     return {
         playTurn(index) {
+            gameState = "ongoing"
             if (maxturn == 9) {
                 console.log("Game Over")
-                GameOver = true;
+                gameState = "tie";
                 return
             }
             let playerindex = index
             let getcell = boardgame.getcell(playerindex)
-            if (getcell.length === 0 && GameOver == false) {
+            if (getcell.length === 0 && gameState == "ongoing") {
                 boardgame.setcell(playerindex, currentplayer.mark)
 
                 isWin = checkWinner(currentplayer.mark)
 
                 if (isWin) {
-                    console.log(`${currentplayer.name} is the winner!`)
-                    GameOver = true;
-                    return
+                    gameState = "win";
+
+                    return { gameState, isWin, currentplayer }
                 } else if (!isWin && maxturn == 8) {
-                    GameOver = true;
-                    console.log("There was no winner, Maximum amount of turns reached")
+                    gameState = "tie";
+
+                    return { gameState, isWin, currentplayer }
                 }
 
 
@@ -127,6 +129,7 @@ const gamecontroller = (function () {
                     currentplayer = player1
                 }
                 maxturn++
+
             } else {
                 console.log("That cell is taken by the other player")
             }
@@ -139,8 +142,9 @@ const displaycontroller = (function () {
     const cells = document.getElementsByClassName('game-cell');
     for (let i = 0; i <= 8; i++) {
         cells[i].addEventListener("click", () => {
-            gamecontroller.playTurn(i)
+            let result = gamecontroller.playTurn(i)
             renderboard()
+            renderwinner(result)
         });
     }
 
@@ -148,11 +152,25 @@ const displaycontroller = (function () {
         let boardinstance = gameboard.getboard();
         for (let i = 0; i <= 8; i++) {
             cells[i].textContent = boardinstance[i];
+            if (boardinstance[i] == "X") {
+                cells[i].style.color = "blue";
+            } else if (boardinstance[i] == "O") {
+                cells[i].style.color = "red";
+            }
         }
 
     }
 
-    function renderwinner() {
+    function renderwinner(outcome) {
+        let textwinner = document.getElementById('WinnerText')
+        let winner = outcome.currentplayer
+        if (outcome != null) {
+            if (outcome.gameState == "win") {
+                textwinner.style.visibility = "visible";
+                textwinner.textContent = `${winner.name} is the winner!`;
+            }
+
+        }
 
     }
     return {
